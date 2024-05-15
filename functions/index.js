@@ -47,6 +47,13 @@ exports.generateRandomEvent = functions.https.onRequest(async (req, res) => {
 
 exports.searchSimilarUrls = functions.https.onRequest(async (req, res) => {
   const targetUrl = req.query.url
+
+
+  //require authenticate user reqesting this
+  if (!context?.auth) {
+    return { message: 'Authentication Required!', code: 401 }
+  }
+
   if (!targetUrl) {
     return res.status(400).send('URL query parameter is required.')
   }
@@ -86,6 +93,12 @@ exports.searchSimilarUrls = functions.https.onRequest(async (req, res) => {
 
 
 exports.getDnsData = functions.https.onRequest(async (req, res) => {
+
+  //require authenticate user reqesting this
+  if (!context?.auth) {
+    return { message: 'Authentication Required!', code: 401 }
+  }
+
 
   const apikey = functions.config().dns.apikey
 

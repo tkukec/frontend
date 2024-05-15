@@ -44,7 +44,7 @@ const filteredEvents = computed(() => {
 
 <template>
   <main class="max-w-screen">
-    <div class="mt-[100px] max-w-screen flex justify-center">
+    <div class="mt-[100px] md:mx-32 mx-10 flex justify-center">
       <div class="justify-center">
         <h1>Phishing Events</h1>
         <div class="search-container">

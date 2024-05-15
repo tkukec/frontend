@@ -18,6 +18,9 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
+
+
+
 const filteredEvents = computed(() => {
   if (!searchTerm.value) {
     return events.value
@@ -44,19 +47,23 @@ const filteredEvents = computed(() => {
 
 <template>
   <main class="max-w-screen">
-    <div class="mt-[100px] max-w-screen flex justify-center">
+    <div class="mt-[100px] md:mx-32 mx-10 flex justify-center">
       <div class="justify-center">
-        <h1>Phishing Events</h1>
-        <div class="search-container">
-          <input v-model="searchTerm" placeholder="Search term" />
-          <select v-model="searchType">
-            <option value="keywords">Keywords</option>
-            <option value="name">Name</option>
-            <option value="date">Date</option>
-            <option value="affectedBrand">Affected Brand</option>
-            <option value="maliciousDomain">Malicious Domain</option>
-          </select>
-          <button @click="openModal">Add New</button>
+        <div class="block content-center">
+          <h1>Phishing Events</h1>
+          <div>
+            <div class="search-container">
+              <input v-model="searchTerm" placeholder="Search term" />
+              <select v-model="searchType">
+                <option value="keywords">Keywords</option>
+                <option value="name">Name</option>
+                <option value="date">Date</option>
+                <option value="affectedBrand">Affected Brand</option>
+                <option value="maliciousDomain">Malicious Domain</option>
+              </select>
+              <button @click="openModal">Add New</button>
+            </div>
+          </div>
         </div>
         <ul>
           <EventItem v-for="event in filteredEvents" :key="event.id" :event="event" />
@@ -103,3 +110,4 @@ const filteredEvents = computed(() => {
   background-color: #0056b3;
 }
 </style>
+

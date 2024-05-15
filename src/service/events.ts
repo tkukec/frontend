@@ -8,6 +8,6 @@ export function useEvents() {
   const eventsRef = collection(db, 'phishing_events')
   const events = useCollection(eventsRef)
 
-
+  console.log(events)
   return { events }
 }

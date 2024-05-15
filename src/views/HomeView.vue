@@ -3,7 +3,7 @@ import RegistrationForm from '@/components/RegistrationForm.vue'
 </script>
 
 <template>
-  <main>
+  <main class="mt-[100px]">
     <RegistrationForm />
   </main>
 </template>

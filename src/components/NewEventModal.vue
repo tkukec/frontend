@@ -21,10 +21,6 @@
           <input v-model="newEvent.maliciousURL" required />
         </label>
         <label>
-          Malicious Domain Registration Date:
-          <input type="date" v-model="newEvent.maliciousDomainRegistrationDate" required />
-        </label>
-        <label>
           Matching Keywords:
           <input v-model="newEvent.matchingKeywords" placeholder="Comma-separated keywords" required />
         </label>

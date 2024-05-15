@@ -47,6 +47,9 @@
 <script>
 import { ref } from 'vue'
 import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore'
+import {db} from '../firebase'
+import { httpsCallable } from 'firebase/functions'
+import { functions } from '../firebase'
 
 export default {
   name: 'NewEventModal',
@@ -57,7 +60,6 @@ export default {
     }
   },
   setup(props, { emit }) {
-    import {db} from '../firebase'
     const newEvent = ref({
       name: '',
       affectedBrand: '',
@@ -78,8 +80,6 @@ export default {
 
     const fetchDnsData = async (domain) => {
       try {
-        import { httpsCallable } from 'firebase/functions'
-        import { functions } from '../firebase'
         const getDnsData = httpsCallable(functions, 'getDnsData')
         const result = await getDnsData({ domain })
         return result.data

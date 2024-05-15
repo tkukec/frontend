@@ -31,24 +31,38 @@
             <span v-if="comment.edited">(edited)</span>
           </li>
         </ul>
+        <button @click="openModal">Edit</button>
       </div>
     </li>
   </ul>
+  <EditEventModal :isOpen="isModalOpen" :eventId="event.id" @close="isModalOpen = false" @update="handleUpdate"/>
 </template>
 
 <script>
 import { PhishingEvent } from '@/service/event_schema'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import EditEventModal from '@/components/EditEventModal.vue'
 
 export default {
   name: 'EventItem',
+  components: { EditEventModal },
   props: {
     event: {
       type: PhishingEvent,
       required: true
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
+    const isModalOpen = ref(false)
+
+    const openModal = () => {
+      isModalOpen.value = true
+    }
+
+    const handleUpdate = () => {
+      emit('update')
+    }
+
     const sortedComments = computed(() => {
       return [...props.event.analystComments].sort(
         (a, b) => a.timestamp.seconds - b.timestamp.seconds
@@ -56,7 +70,10 @@ export default {
     })
 
     return {
-      sortedComments
+      sortedComments,
+      isModalOpen,
+      openModal,
+      handleUpdate
     }
   }
 }
@@ -104,4 +121,30 @@ export default {
 .card-content ul li {
   list-style-type: disc;
 }
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #004080;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
 </style>

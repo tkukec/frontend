@@ -1,3 +1,7 @@
+# Hosted on Firebase
+webapp: https://fir-auth-1b1b7.web.app/
+
+
 # Security
 Using Firebase for Auth and Firestore for a database ensures that the data is secure and can be accessed only by the authenticated users.
 Furthermore there are [firestore.rules] added which ensures data manipulation is controlled.

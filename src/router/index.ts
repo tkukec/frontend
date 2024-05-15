@@ -15,6 +15,11 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found-so-go-home',
+    component: () => import('../views/HomeView.vue')
   }
 ]
 
@@ -25,9 +30,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const auth = getAuth(firebaseApp)
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
   if (requiresAuth) {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         next()
       } else {

@@ -10,7 +10,6 @@ admin.initializeApp()
 const db = admin.firestore()
 
 
-
 // just used interally for creating random events
 exports.generateRandomEvent = functions.https.onRequest(async (req, res) => {
   const event = {
@@ -46,38 +45,41 @@ exports.generateRandomEvent = functions.https.onRequest(async (req, res) => {
 })
 
 
-
 exports.searchSimilarUrls = functions.https.onRequest(async (req, res) => {
-  const targetUrl = req.query.url;
+  const targetUrl = req.query.url
   if (!targetUrl) {
-    return res.status(400).send('URL query parameter is required.');
+    return res.status(400).send('URL query parameter is required.')
   }
 
   try {
-    const snapshot = await db.collection('phishing_events').get();
-    const events = [];
+    const snapshot = await db.collection('phishing_events').get()
+    const events = []
 
     snapshot.forEach(doc => {
-      const data = doc.data();
+      const data = doc.data()
       events.push({
         id: doc.id,
         ...data
-      });
-    });
+      })
+    })
 
-    const matchedEvents = events.filter(event => {
-      const url = event.maliciousURL || '';
-      const similarityScore = similarity(url, targetUrl);
-      return similarityScore > 0.5; // Adjust similarity threshold as needed
-    });
+    const matchedEvents = events
     //sort and return first
     matchedEvents.sort((a, b) => {
-      return similarity(a.maliciousURL, targetUrl) - similarity(b.maliciousURL, targetUrl);
-    });
+      return similarity(a.maliciousURL, targetUrl) - similarity(b.maliciousURL, targetUrl)
+    })
 
-    res.status(200).json(matchedEvents[0] || null);
+    const foundExact = events.find(event => event.maliciousURL === targetUrl) != undefined
+
+
+    res.status(200).json(
+      {
+        matchedEvents: matchedEvents.slice(0, 10),
+        foundExact: foundExact
+      }
+    )
   } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).send('Error fetching events.');
+    console.error('Error fetching events:', error)
+    res.status(500).send('Error fetching events.')
   }
-});
+})

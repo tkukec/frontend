@@ -13,4 +13,15 @@ All third party calls are happening on the server side(Cloud functions).
 The exposed API error you see on github should be ignored because its acceptable to publish the API key for this project 
 as its usage is controlled by security rules and from firebase console.
 GCloud only allows firebase hosting domain to access the API key.
-```
+
+
+
+# Shift left security
+- NPM audit
+- ESLint
+- Typescript
+- Using latest versions of libraries, that are "fresh"
+- Pull request reviews
+- Only certain people have access to the firebase console and git write access
+- SonarLint
+![img.png](img.png)

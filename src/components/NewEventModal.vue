@@ -1,11 +1,5 @@
-<!-- src/components/NewEventModal.vue -->
-<script setup lang="ts">
-
-</script>
-
-
 <template>
-  <div class="modal-overlay" @click.self="closeModal">
+  <div v-if="isOpen" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <h2>Create New Event</h2>
       <form @submit.prevent="createEvent">
@@ -46,10 +40,9 @@
 
 <script>
 import { ref } from 'vue'
-import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore'
-import {db} from '../firebase'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { db, functions } from '../firebase'
 import { httpsCallable } from 'firebase/functions'
-import { functions } from '../firebase'
 
 export default {
   name: 'NewEventModal',
@@ -77,7 +70,6 @@ export default {
       analystComments: []
     })
 
-
     const fetchDnsData = async (domain) => {
       try {
         const getDnsData = httpsCallable(functions, 'getDnsData')
@@ -85,12 +77,9 @@ export default {
         return result.data
       } catch (error) {
         console.error('Error fetching DNS data:', error)
-      } finally {
-        return null;
-       }
-
+        return null
+      }
     }
-
 
     const closeModal = () => {
       emit('close')
@@ -98,16 +87,16 @@ export default {
 
     const createEvent = async () => {
       try {
-
-
         const dnsData = await fetchDnsData(newEvent.value.maliciousURL)
 
-        newEvent.value.maliciousDomainRegistrationDate = dnsData.creationDate
-        newEvent.value.maliciousDomainDNSRecords.A = dnsData.A
-        newEvent.value.maliciousDomainDNSRecords.NS = dnsData.NS
-        newEvent.value.maliciousDomainDNSRecords.MX = dnsData.MX
-        newEvent.value.matchingKeywords = newEvent.value.matchingKeywords.split(',').map(keyword => keyword.trim())
-        await addDoc(collection(db, 'phishing_events'), newEvent.value)
+        if (dnsData) {
+          newEvent.value.maliciousDomainRegistrationDate = dnsData.creationDate
+          newEvent.value.maliciousDomainDNSRecords.A = dnsData.A
+          newEvent.value.maliciousDomainDNSRecords.NS = dnsData.NS
+          newEvent.value.maliciousDomainDNSRecords.MX = dnsData.MX
+          newEvent.value.matchingKeywords = newEvent.value.matchingKeywords.split(',').map(keyword => keyword.trim())
+          await addDoc(collection(db, 'phishing_events'), newEvent.value)
+        }
         closeModal()
       } catch (error) {
         console.error('Error creating new event:', error)

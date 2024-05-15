@@ -1,9 +1,8 @@
-<!-- src/views/EventView.vue -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useEvents } from '../service/events'
 import EventItem from '../components/EventItem.vue'
-import NewEventModal from '../components/NewEventModal.vue'
+import NewEventModal from '../components/NewEventModal.vue' // Correctly import NewEventModal
 
 const searchTerm = ref('')
 const searchType = ref('keywords') // Default search type
@@ -17,9 +16,6 @@ const openModal = () => {
 const closeModal = () => {
   isModalOpen.value = false
 }
-
-
-
 
 const filteredEvents = computed(() => {
   if (!searchTerm.value) {
@@ -68,7 +64,7 @@ const filteredEvents = computed(() => {
         <ul>
           <EventItem v-for="event in filteredEvents" :key="event.id" :event="event" />
         </ul>
-        <NewEventModal v-if="isModalOpen" :isOpen="isModalOpen" @close="closeModal" />
+        <NewEventModal :isOpen="isModalOpen" @close="closeModal" />
       </div>
     </div>
   </main>
@@ -110,4 +106,3 @@ const filteredEvents = computed(() => {
   background-color: #0056b3;
 }
 </style>
-

@@ -14,7 +14,7 @@
         </p>
         <p>
           <strong>Malicious Domain Registration Date:</strong>
-          {{ event.maliciousDomainRegistrationDate?.toDate().toLocaleString() }}
+          {{ formattedmaliciousDomainRegistrationDate }}
         </p>
         <p><strong>Malicious Domain DNS Records:</strong></p>
         <ul>
@@ -68,6 +68,15 @@ export default {
         (a, b) => a.timestamp.seconds - b.timestamp.seconds
       )
     })
+
+    const formattedmaliciousDomainRegistrationDate = computed(() => {
+      try {
+        return props.event.maliciousDomainRegistrationDate?.toDate().toLocaleString()
+      } catch (error) {
+        console.error('Error formatting date:', error)
+        return ''
+      }
+     })
 
     return {
       sortedComments,

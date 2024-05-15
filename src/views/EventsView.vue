@@ -18,6 +18,9 @@ const closeModal = () => {
   isModalOpen.value = false
 }
 
+
+
+
 const filteredEvents = computed(() => {
   if (!searchTerm.value) {
     return events.value
@@ -107,3 +110,4 @@ const filteredEvents = computed(() => {
   background-color: #0056b3;
 }
 </style>
+

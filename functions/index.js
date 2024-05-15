@@ -83,3 +83,33 @@ exports.searchSimilarUrls = functions.https.onRequest(async (req, res) => {
     res.status(500).send('Error fetching events.')
   }
 })
+
+
+exports.getDnsData = functions.https.onRequest(async (req, res) => {
+
+  const apikey = functions.config().dns.apikey
+
+  const targetDomain = req.query.domain
+
+
+  const url = `https://www.whoisxmlapi.com/whoisserver/DNSService?apiKey=${apikey}&domainName=${targetDomain}&type=_all`
+
+  const data = await fetch(url).then(res => res.json().DNSData)
+
+
+  const aRecords = Array.from(data.dnsRecords).filter(record => record.dnsType === 'A') ?? []
+
+  const nsRecords = Array.from(data.dnsRecords).filter(record => record.dnsType === 'NS') ?? []
+
+  const mxRecords = Array.from(data.dnsRecords).filter(record => record.dnsType === 'MX') ?? []
+
+
+  const resData = {
+    creationDate: data.audit.createdDate,
+    A: aRecords,
+    NS: nsRecords,
+    MX: mxRecords
+  }
+  res.status(200).json(resData)
+
+})
